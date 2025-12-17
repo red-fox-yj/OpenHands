@@ -198,6 +198,12 @@ class LLM(RetryMixin, DebugMixin):
             or ('claude-sonnet-4' in _model_lower)
         ) and ('temperature' in kwargs and 'top_p' in kwargs):
             kwargs.pop('top_p', None)
+        
+        if "gpt-5" in _model_lower:
+            kwargs['reasoning_effort'] = "high"
+
+        if "claude-sonnet-4-5" in _model_lower:
+            kwargs['thinking'] = {"type": "enabled",'budget_tokens': 16384}
 
         # Add completion_kwargs if present
         if self.config.completion_kwargs is not None:
