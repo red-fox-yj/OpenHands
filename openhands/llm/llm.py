@@ -203,7 +203,10 @@ class LLM(RetryMixin, DebugMixin):
             kwargs['reasoning_effort'] = "high"
 
         if "claude-sonnet-4-5" in _model_lower:
-            kwargs['thinking'] = {"type": "enabled",'budget_tokens': 16384}
+            kwargs['thinking'] = {"type": "enabled", 'budget_tokens': 16384}
+
+        if 'gemini-2.5-pro' in _model_lower:
+            kwargs['reasoning_effort'] = "high"
 
         # Add completion_kwargs if present
         if self.config.completion_kwargs is not None:
