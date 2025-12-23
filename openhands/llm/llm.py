@@ -136,15 +136,17 @@ class LLM(RetryMixin, DebugMixin):
             # For Gemini models, only map 'low' to optimized thinking budget
             # Let other reasoning_effort values pass through to API as-is
             if 'gemini-2.5-pro' in self.config.model:
-                logger.debug(
-                    f'Gemini model {self.config.model} with reasoning_effort {self.config.reasoning_effort}'
-                )
-                if self.config.reasoning_effort in {None, 'low', 'none'}:
-                    kwargs['thinking'] = {'budget_tokens': 128}
-                    kwargs['allowed_openai_params'] = ['thinking']
-                    kwargs.pop('reasoning_effort', None)
-                else:
-                    kwargs['reasoning_effort'] = self.config.reasoning_effort
+                if 'gemini-2.5-pro' in _model_lower:
+                    kwargs['reasoning_effort'] = "high"
+                # logger.debug(
+                #     f'Gemini model {self.config.model} with reasoning_effort {self.config.reasoning_effort}'
+                # )
+                # if self.config.reasoning_effort in {None, 'low', 'none'}:
+                #     kwargs['thinking'] = {'budget_tokens': 128}
+                #     kwargs['allowed_openai_params'] = ['thinking']
+                #     kwargs.pop('reasoning_effort', None)
+                # else:
+                #     kwargs['reasoning_effort'] = self.config.reasoning_effort
                 logger.debug(
                     f'Gemini model {self.config.model} with reasoning_effort {self.config.reasoning_effort} mapped to thinking {kwargs.get("thinking")}'
                 )
@@ -204,9 +206,6 @@ class LLM(RetryMixin, DebugMixin):
 
         if "claude-sonnet-4-5" in _model_lower:
             kwargs['thinking'] = {"type": "enabled", 'budget_tokens': 16384}
-
-        if 'gemini-2.5-pro' in _model_lower:
-            kwargs['reasoning_effort'] = "high"
 
         # Add completion_kwargs if present
         if self.config.completion_kwargs is not None:
