@@ -136,8 +136,7 @@ class LLM(RetryMixin, DebugMixin):
             # For Gemini models, only map 'low' to optimized thinking budget
             # Let other reasoning_effort values pass through to API as-is
             if 'gemini-2.5-pro' in self.config.model:
-                if 'gemini-2.5-pro' in _model_lower:
-                    kwargs['reasoning_effort'] = "high"
+                kwargs['reasoning_effort'] = "high"
                 # logger.debug(
                 #     f'Gemini model {self.config.model} with reasoning_effort {self.config.reasoning_effort}'
                 # )
